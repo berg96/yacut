@@ -63,7 +63,7 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Создать таблицу через flask shell:
+Создать таблицу БД через flask shell:
 
 ```
 flask shell
