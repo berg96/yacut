@@ -49,7 +49,7 @@ def index_view():
 
 
 @app.route('/<string:short_id>')
-def opinion_view(short_id):
+def redirect_to_original_url(short_id):
     return redirect(
         URLMap.query.filter_by(short=short_id).first_or_404().original
     )
