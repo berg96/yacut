@@ -17,7 +17,5 @@ services:
       - .env
     ports:
       - "5050:5000"
-    volumes:
-      - .static://yacut/static
     depends_on:
       - db
