@@ -1,11 +1,17 @@
 import string
 from random import choice
 
-from flask import flash, render_template, url_for
+from flask import flash, redirect, render_template, url_for
 
 from . import app, db
 from .forms import URLMapForm
 from .models import URLMap
+
+SAME_SHORT_ERROR_MESSAGE = (
+    'Предложенный вариант короткой ссылки уже существует.'
+)
+SAME_SHORT_FLASH_CATEGORY = 'same_short'
+SUCCESS_FLASH_CATEGORY = 'success_url'
 
 
 def get_unique_short_id():
@@ -25,10 +31,7 @@ def index_view():
             if URLMap.query.filter_by(
                     short=short_url_from_user
             ).first():
-                flash(
-                    'Предложенный вариант короткой ссылки уже существует.',
-                    'same_short'
-                )
+                flash(SAME_SHORT_ERROR_MESSAGE, SAME_SHORT_FLASH_CATEGORY)
                 return render_template('index.html', form=form)
             short_id = short_url_from_user
         else:
@@ -40,6 +43,13 @@ def index_view():
         db.session.commit()
         flash(
             f'{url_for("index_view", _external=True) + short_id}',
-            'success_url'
+            SUCCESS_FLASH_CATEGORY
         )
     return render_template('index.html', form=form)
+
+
+@app.route('/<string:short_id>')
+def opinion_view(short_id):
+    return redirect(
+        URLMap.query.filter_by(short=short_id).first_or_404().original
+    )
