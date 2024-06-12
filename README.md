@@ -2,9 +2,9 @@
 
 ## Описание проекта 
 
-На большинстве сайтов адреса страниц довольно длинные, например как у той страницы, на которой вы сейчас находитесь. Делиться такими длинными ссылками не всегда удобно, а иногда и вовсе невозможно. 
-Удобнее использовать короткие ссылки. Например, ссылки http://yacut.ru/lesson и http://yacut.ru/12e07d воспринимаются лучше, чем https://practicum.yandex.ru/trainer/backend-developer/lesson/12e07d96-31f3-449f-abcf-e468b6a39061/. 
-Проект YaCut — это сервис укорачивания ссылок. Его назначение — ассоциировать длинную пользовательскую ссылку с короткой, которую предлагает сам пользователь или предоставляет сервис. 
+На большинстве сайтов адреса страниц довольно длинные. Делиться такими длинными ссылками не всегда удобно, а иногда и вовсе невозможно. 
+Удобнее использовать короткие ссылки. Например, ссылки http://yacut.ddns.net/zarabotoz или http://yacut.ddns.net/12e07d воспринимаются лучше, чем https://checkroi.ru/blog/kak-zarabotat-studentu-v-internete/#Zarabotok_na_kopirajtinge_i_rerajtinge. 
+Проект [YaCut](https://yacut.ddns.net/)([https://yacut.ddns.net/](https://yacut.ddns.net/)) — это сервис укорачивания ссылок. Его назначение — ассоциировать длинную пользовательскую ссылку с короткой, которую предлагает сам пользователь или предоставляет сервис. 
 
 
 ### Автор backend Артём Куликов
@@ -22,7 +22,6 @@ tg: [@Berg1005](https://t.me/berg1005)
 * Flask-Migrate (v 4.0.5) 
 * alembic (v 1.12.0) 
 * Flask-WTF (v 1.2.1)
-* и др.
 
 
 ## Как запустить проект
@@ -63,16 +62,12 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Создать таблицу БД через flask shell:
+Применить миграции:
 
 ```
-flask shell
-```
-
-```
->>> from yacut import db
->>> db.create_all()
->>> exit()
+flask db stamp
+flask db migrate
+flask db upgrade
 ```
 
 Запустить сервер:
@@ -80,3 +75,5 @@ flask shell
 ```
 flask run
 ```
+Документация для API:
+[http://yacut.ddns.net/api/docs/](http://yacut.ddns.net/api/docs/)
