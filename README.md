@@ -3,7 +3,7 @@
 ## Описание проекта 
 
 На большинстве сайтов адреса страниц довольно длинные. Делиться такими длинными ссылками не всегда удобно, а иногда и вовсе невозможно. 
-Удобнее использовать короткие ссылки. Например, ссылки http://yacut.ddns.net/zarabotoz или http://yacut.ddns.net/12e07d воспринимаются лучше, чем https://checkroi.ru/blog/kak-zarabotat-studentu-v-internete/#Zarabotok_na_kopirajtinge_i_rerajtinge. 
+Удобнее использовать короткие ссылки. Например, ссылки https://yacut.ddns.net/zarabotoz или https://yacut.ddns.net/12e07d воспринимаются лучше, чем https://checkroi.ru/blog/kak-zarabotat-studentu-v-internete/#Zarabotok_na_kopirajtinge_i_rerajtinge. 
 Проект [YaCut](https://yacut.ddns.net/)([https://yacut.ddns.net/](https://yacut.ddns.net/)) — это сервис укорачивания ссылок. Его назначение — ассоциировать длинную пользовательскую ссылку с короткой, которую предлагает сам пользователь или предоставляет сервис. 
 
 
@@ -76,5 +76,5 @@ flask db upgrade
 ```
 flask run
 ```
-Документация для API:
-[http://yacut.ddns.net/api/docs/](http://yacut.ddns.net/api/docs/)
+Документация для API при запущенном сервере:
+[http://127.0.0.1:5000/api/docs/](http://127.0.0.1:5000/api/docs/)
