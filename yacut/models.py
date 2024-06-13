@@ -1,12 +1,23 @@
 import re
 from datetime import datetime
-from random import choice
+from random import choices
 
 from flask import url_for
-from settings import CHARACTERS_FOR_SHORT, SHORT_PATTERN
+from wtforms.validators import ValidationError
 
-from . import constants, db
-from .error_handlers import InvalidAPIUsage
+from . import db
+from settings import (
+    ORIGINAL_LINK_MAX_LENGTH, SHORT_CHARACTERS, SHORT_MAX_LENGTH, SHORT_PATTERN
+)
+
+SHORT_LENGTH = 6
+SHORT_INVALID = 'Указано недопустимое имя для короткой ссылки'
+SHORT_SAME_ERROR_MESSAGE = (
+    'Предложенный вариант короткой ссылки уже существует.'
+)
+ORIGINAL_LINK_INVALID = 'Указана недопустимая url'
+REDIRECT_FUNC_NAME = 'redirect_to_original_url'
+SHORT_UNIQUE_NOT_FOUND = 'Не нашлось свободной уникальной короткой ссылки'
 
 
 class URLMap(db.Model):
@@ -15,11 +26,11 @@ class URLMap(db.Model):
         primary_key=True
     )
     original = db.Column(
-        db.String(constants.ORIGINAL_LINK_MAX_LENGTH),
+        db.String(ORIGINAL_LINK_MAX_LENGTH),
         nullable=False
     )
     short = db.Column(
-        db.String(constants.SHORT_MAX_LENGTH),
+        db.String(SHORT_MAX_LENGTH),
         unique=True,
         nullable=False
     )
@@ -33,45 +44,42 @@ class URLMap(db.Model):
         return dict(
             url=self.original,
             short_link=url_for(
-                constants.REDIRECT_FUNC_NAME, _external=True, short=self.short
+                REDIRECT_FUNC_NAME, _external=True, short=self.short
             )
         )
 
     @staticmethod
-    def get_urlmap(short):
+    def get(short):
         return URLMap.query.filter_by(short=short).first()
 
     @staticmethod
-    def is_short_exists(short):
-        return bool(URLMap.get_urlmap(short))
-
-    @staticmethod
     def get_unique_short():
-        for _ in range(constants.MAX_TRY):
-            random_string = ''.join(
-                choice(CHARACTERS_FOR_SHORT)
-                for _ in range(constants.SHORT_LENGTH)
-            )
-            if not URLMap.is_short_exists(random_string):
+        for _ in range(len(SHORT_CHARACTERS)**SHORT_LENGTH):
+            random_string = ''.join(choices(SHORT_CHARACTERS, k=SHORT_LENGTH))
+            if not URLMap.get(random_string):
                 return random_string
+        raise RuntimeError(SHORT_UNIQUE_NOT_FOUND)
 
     @staticmethod
-    def create(original, short):
+    def create(original, short, form: bool):
         if short:
-            if (
-                not re.match(SHORT_PATTERN, short)
-                or len(short) > constants.SHORT_MAX_LENGTH
-            ):
-                raise InvalidAPIUsage(constants.SHORT_INVALID)
+            if not form:
+                if (
+                    len(short) > SHORT_MAX_LENGTH
+                    or not re.match(SHORT_PATTERN, short)
+                ):
+                    raise ValidationError(SHORT_INVALID)
+                if URLMap.get(short):
+                    raise ValidationError(SHORT_SAME_ERROR_MESSAGE)
         else:
             short = URLMap.get_unique_short()
-        if URLMap.is_short_exists(short):
-            raise InvalidAPIUsage(constants.SHORT_SAME_ERROR_MESSAGE)
-        urlmap = URLMap(original=original, short=short)
-        db.session.add(urlmap)
+        if len(original) > ORIGINAL_LINK_MAX_LENGTH:
+            raise ValidationError(ORIGINAL_LINK_INVALID)
+        url_map = URLMap(original=original, short=short)
+        db.session.add(url_map)
         db.session.commit()
-        return urlmap
+        return url_map
 
     @staticmethod
-    def get_original_link(short):
+    def get_original_link_or_404(short):
         return URLMap.query.filter_by(short=short).first_or_404().original

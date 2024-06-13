@@ -1,38 +1,42 @@
 from flask_wtf import FlaskForm
-from settings import SHORT_PATTERN
 from wtforms.fields.simple import StringField, SubmitField, URLField
 from wtforms.validators import (
     URL, DataRequired, Length, Optional, Regexp, ValidationError
 )
 
-from . import constants
-from .models import URLMap
+from .models import SHORT_INVALID, SHORT_SAME_ERROR_MESSAGE, URLMap
+from settings import ORIGINAL_LINK_MAX_LENGTH, SHORT_MAX_LENGTH, SHORT_PATTERN
+
+ORIGINAL_LINK_LABEL = 'Длинная ссылка'
+ORIGINAL_LINK_VALIDATOR_REQUIRED_MESSAGE = 'Обязательное поле'
+SHORT_LABEL = 'Ваш вариант короткой ссылки'
+SUBMIT_LABEL = 'Создать'
 
 
 class URLMapForm(FlaskForm):
     original_link = URLField(
-        constants.ORIGINAL_LINK_LABEL,
+        ORIGINAL_LINK_LABEL,
         validators=[
             DataRequired(
-                message=constants.ORIGINAL_LINK_VALIDATOR_REQUIRED_MESSAGE
+                message=ORIGINAL_LINK_VALIDATOR_REQUIRED_MESSAGE
             ),
-            Length(max=constants.ORIGINAL_LINK_MAX_LENGTH),
+            Length(max=ORIGINAL_LINK_MAX_LENGTH),
             URL()
         ]
     )
     custom_id = StringField(
-        constants.SHORT_LABEL,
+        SHORT_LABEL,
         validators=[
-            Length(max=constants.SHORT_MAX_LENGTH),
+            Length(max=SHORT_MAX_LENGTH),
             Optional(),
             Regexp(
-                regex=SHORT_PATTERN, message=constants.SHORT_INVALID
+                regex=SHORT_PATTERN, message=SHORT_INVALID
             )
         ]
     )
-    submit = SubmitField(constants.SUBMIT_LABEL)
+    submit = SubmitField(SUBMIT_LABEL)
 
     @staticmethod
     def validate_custom_id(form, field):
-        if URLMap.is_short_exists(field.data):
-            raise ValidationError(constants.SHORT_SAME_ERROR_MESSAGE)
+        if URLMap.get(field.data):
+            raise ValidationError(SHORT_SAME_ERROR_MESSAGE)

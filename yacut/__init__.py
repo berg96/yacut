@@ -2,9 +2,12 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_swagger_ui import get_swaggerui_blueprint
+
 from settings import Config
 
-from .constants import API_DOCS_PATH, SWAGGER_URL
+SWAGGER_URL = '/api/docs'
+API_DOCS_PATH = '/static/openapi.yml'
+
 
 app = Flask(__name__)
 app.config.from_object(Config)

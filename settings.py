@@ -2,9 +2,11 @@ import os
 import re
 import string
 
-CHARACTERS_FOR_SHORT = string.ascii_letters + string.digits
+ORIGINAL_LINK_MAX_LENGTH = 64000
+SHORT_MAX_LENGTH = 16
+SHORT_CHARACTERS = string.ascii_letters + string.digits
 SHORT_PATTERN = (
-    f'^[{re.escape(CHARACTERS_FOR_SHORT)}]+$'
+    f'^[{re.escape(SHORT_CHARACTERS)}]+$'
 )
 
 

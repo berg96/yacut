@@ -1,9 +1,8 @@
-from flask import redirect, render_template, url_for
+from flask import flash, redirect, render_template, url_for
 
 from . import app
-from .constants import REDIRECT_FUNC_NAME
 from .forms import URLMapForm
-from .models import URLMap
+from .models import REDIRECT_FUNC_NAME, URLMap
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -11,11 +10,25 @@ def index_view():
     form = URLMapForm()
     if not form.validate_on_submit():
         return render_template('index.html', form=form)
-    short = URLMap.create(form.original_link.data, form.custom_id.data).short
-    short_url = f'{url_for(REDIRECT_FUNC_NAME, _external=True, short=short)}'
-    return render_template('index.html', form=form, short_url=short_url)
+    try:
+        return render_template(
+            'index.html',
+            form=form,
+            short_url=url_for(
+                REDIRECT_FUNC_NAME,
+                _external=True,
+                short=URLMap.create(
+                    original=form.original_link.data,
+                    short=form.custom_id.data,
+                    form=True
+                ).short
+            )
+        )
+    except Exception as error:
+        flash(error.args[0])
+        return render_template('index.html', form=form)
 
 
 @app.route('/<string:short>')
 def redirect_to_original_url(short):
-    return redirect(URLMap.get_original_link(short))
+    return redirect(URLMap.get_original_link_or_404(short))
