@@ -77,4 +77,5 @@ flask db upgrade
 flask run
 ```
 Документация для API при запущенном сервере:
+
 [http://127.0.0.1:5000/api/docs/](http://127.0.0.1:5000/api/docs/)
