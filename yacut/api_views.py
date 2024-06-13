@@ -28,8 +28,10 @@ def create_id():
     try:
         return jsonify(
             URLMap.create(
-                original=data['url'], short=data.get('custom_id'), form=False
+                original=data['url'], short=data.get('custom_id'), flag=False
             ).to_dict()
         ), HTTPStatus.CREATED
-    except Exception as error:
-        raise InvalidAPIUsage(error.args[0])
+    except ValueError as error:
+        raise InvalidAPIUsage(str(error))
+    except RuntimeError as error:
+        raise InvalidAPIUsage(str(error))

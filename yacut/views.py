@@ -20,12 +20,12 @@ def index_view():
                 short=URLMap.create(
                     original=form.original_link.data,
                     short=form.custom_id.data,
-                    form=True
+                    flag=True
                 ).short
             )
         )
-    except Exception as error:
-        flash(error.args[0])
+    except RuntimeError as error:
+        flash(str(error))
         return render_template('index.html', form=form)
 
 

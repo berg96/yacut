@@ -3,14 +3,13 @@ from datetime import datetime
 from random import choices
 
 from flask import url_for
-from wtforms.validators import ValidationError
 
 from . import db
 from settings import (
-    ORIGINAL_LINK_MAX_LENGTH, SHORT_CHARACTERS, SHORT_MAX_LENGTH, SHORT_PATTERN
+    ORIGINAL_LINK_MAX_LENGTH, SHORT_CHARACTERS, SHORT_LENGTH, SHORT_MAX_LENGTH,
+    SHORT_PATTERN
 )
 
-SHORT_LENGTH = 6
 SHORT_INVALID = 'Указано недопустимое имя для короткой ссылки'
 SHORT_SAME_ERROR_MESSAGE = (
     'Предложенный вариант короткой ссылки уже существует.'
@@ -61,20 +60,20 @@ class URLMap(db.Model):
         raise RuntimeError(SHORT_UNIQUE_NOT_FOUND)
 
     @staticmethod
-    def create(original, short, form: bool):
+    def create(original, short, flag: bool):
         if short:
-            if not form:
+            if not flag:
                 if (
                     len(short) > SHORT_MAX_LENGTH
                     or not re.match(SHORT_PATTERN, short)
                 ):
-                    raise ValidationError(SHORT_INVALID)
+                    raise ValueError(SHORT_INVALID)
                 if URLMap.get(short):
-                    raise ValidationError(SHORT_SAME_ERROR_MESSAGE)
+                    raise ValueError(SHORT_SAME_ERROR_MESSAGE)
+                if len(original) > ORIGINAL_LINK_MAX_LENGTH:
+                    raise ValueError(ORIGINAL_LINK_INVALID)
         else:
             short = URLMap.get_unique_short()
-        if len(original) > ORIGINAL_LINK_MAX_LENGTH:
-            raise ValidationError(ORIGINAL_LINK_INVALID)
         url_map = URLMap(original=original, short=short)
         db.session.add(url_map)
         db.session.commit()
