@@ -2,7 +2,7 @@ import os
 import re
 import string
 
-ORIGINAL_LINK_MAX_LENGTH = 64000
+ORIGINAL_LINK_MAX_LENGTH = 80000
 SHORT_MAX_LENGTH = 16
 SHORT_CHARACTERS = string.ascii_letters + string.digits
 SHORT_PATTERN = (
