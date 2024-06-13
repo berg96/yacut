@@ -3,9 +3,9 @@ from datetime import datetime
 from random import choice
 
 from flask import url_for
-
 from settings import CHARACTERS_FOR_SHORT, SHORT_PATTERN
-from . import db, constants
+
+from . import constants, db
 from .error_handlers import InvalidAPIUsage
 
 

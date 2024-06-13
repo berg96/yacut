@@ -1,7 +1,7 @@
-from flask import flash, redirect, render_template, url_for
+from flask import redirect, render_template, url_for
 
+from . import app
 from .constants import REDIRECT_FUNC_NAME
-from . import app, constants
 from .forms import URLMapForm
 from .models import URLMap
 

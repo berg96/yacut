@@ -15,3 +15,5 @@ SHORT_NOT_FOUND = 'Указанный id не найден'
 SHORT_SAME_ERROR_MESSAGE = (
     'Предложенный вариант короткой ссылки уже существует.'
 )
+SWAGGER_URL = '/api/docs'
+API_DOCS_PATH = '/static/openapi.yml'

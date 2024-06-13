@@ -4,14 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_swagger_ui import get_swaggerui_blueprint
 from settings import Config
 
+from .constants import API_DOCS_PATH, SWAGGER_URL
+
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
-SWAGGER_URL = '/api/docs'
-API_URL = '/static/openapi.yml'
-
-app.register_blueprint(get_swaggerui_blueprint(SWAGGER_URL, API_URL))
+app.register_blueprint(get_swaggerui_blueprint(SWAGGER_URL, API_DOCS_PATH))
 
 from . import api_views, error_handlers, views
