@@ -28,7 +28,9 @@ def create_id():
     try:
         return jsonify(
             URLMap.create(
-                original=data['url'], short=data.get('custom_id'), validate=False
+                original=data['url'],
+                short=data.get('custom_id'),
+                validate=False
             ).to_dict()
         ), HTTPStatus.CREATED
     except (ValueError, RuntimeError) as error:
