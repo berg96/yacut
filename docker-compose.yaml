@@ -1,0 +1,23 @@
+version: '3.8'
+volumes:
+  pg_data:
+
+services:
+  db:
+    image: postgres
+    env_file: .env
+    ports:
+      - "5435:5432"
+    volumes:
+      - pg_data://var/lib/postgresql/data
+
+  app:
+    image: berg1005/yacut
+    env_file:
+      - .env
+    ports:
+      - "5050:5000"
+    volumes:
+      - ./static://yacut/static
+    depends_on:
+      - db

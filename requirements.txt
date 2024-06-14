@@ -31,4 +31,6 @@ typing_extensions==4.11.0
 Werkzeug==3.0.0
 WTForms==3.0.1
 zipp==3.18.1
+psycopg2==2.9.9
 flask_swagger_ui==4.11.1
+gunicorn==22.0.0

@@ -1,0 +1,14 @@
+.git
+.idea
+instance
+.github
+postman_collection
+tests
+venv
+.env
+.env_example
+.flake8
+docker-compose.yaml
+Dockerfile
+.gitignore
+openapi.yml
