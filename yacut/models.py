@@ -62,7 +62,7 @@ class URLMap(db.Model):
     @staticmethod
     def create(original, short, validate: bool):
         if short:
-            if not validate:
+            if validate:
                 if (
                     len(short) > SHORT_MAX_LENGTH
                     or not re.match(SHORT_PATTERN, short)
@@ -72,7 +72,7 @@ class URLMap(db.Model):
                     raise ValueError(SHORT_SAME_ERROR_MESSAGE)
         else:
             short = URLMap.get_unique_short()
-        if not validate and len(original) > ORIGINAL_LINK_MAX_LENGTH:
+        if validate and len(original) > ORIGINAL_LINK_MAX_LENGTH:
             raise ValueError(ORIGINAL_LINK_INVALID)
         url_map = URLMap(original=original, short=short)
         db.session.add(url_map)

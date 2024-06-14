@@ -30,7 +30,7 @@ def create_id():
             URLMap.create(
                 original=data['url'],
                 short=data.get('custom_id'),
-                validate=False
+                validate=True
             ).to_dict()
         ), HTTPStatus.CREATED
     except (ValueError, RuntimeError) as error:
