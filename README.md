@@ -1,4 +1,4 @@
-![Workflow status badge](https://github.com/berg96/yacut/actions/workflows/main.yml/badge.svg)
+![Workflow status badge](https://github.com/berg96/yacut/actions/workflows/main.yaml/badge.svg)
 # Проект YaCut 
 
 ## Описание проекта 
