@@ -1,3 +1,4 @@
+![Workflow status badge](https://github.com/berg96/yacut/actions/workflows/main.yml/badge.svg)
 # Проект YaCut 
 
 ## Описание проекта 
